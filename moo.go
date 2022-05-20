@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -111,6 +112,10 @@ func main() {
 			var guess Guess
 			fmt.Scan(&guess.number)
 			guess.formatNumber()
+
+			if guess.number == "q" {
+				os.Exit(0)
+			}
 
 			game.totalGuesses++
 
