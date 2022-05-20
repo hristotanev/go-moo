@@ -9,7 +9,16 @@ import (
 	"time"
 )
 
+const NUM_LEN = 4
 const MIN, MAX = 1000, 10000
+
+func min(x, y int) int {
+	if x <= y {
+		return x
+	}
+
+	return y
+}
 
 type Game struct {
 	number       string
@@ -46,7 +55,7 @@ func (guess *Guess) formatNumber() {
 func (guess *Guess) validate() error {
 	errorMessage := errors.New("bad guess")
 
-	if len(guess.number) != 4 {
+	if len(guess.number) != NUM_LEN {
 		return errorMessage
 	}
 
@@ -59,6 +68,21 @@ func (guess *Guess) validate() error {
 }
 
 func (guess *Guess) calculateNumberOfBullsAndCows(numberToGuess string) {
+	guessDigits := make([]int, 10)
+	numberToGuessDigits := make([]int, 10)
+
+	for i := 0; i < len(numberToGuess); i++ {
+		if guess.number[i] == numberToGuess[i] {
+			guess.bulls++
+		} else {
+			guessDigits[guess.number[i]-'0']++
+			numberToGuessDigits[numberToGuess[i]-'0']++
+		}
+	}
+
+	for i := 0; i < 10; i++ {
+		guess.cows += min(numberToGuessDigits[i], guessDigits[i])
+	}
 }
 
 func main() {
@@ -86,7 +110,7 @@ func main() {
 			guess.calculateNumberOfBullsAndCows(game.number)
 			guess.displaySummary()
 
-			if guess.bulls == 4 {
+			if guess.bulls == NUM_LEN {
 				game.displaySummary()
 				break
 			}
