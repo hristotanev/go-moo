@@ -10,7 +10,8 @@ import (
 )
 
 const NUM_LEN = 4
-const MIN, MAX = 1000, 10000
+
+var MIN, MAX int
 
 func min(x, y int) int {
 	if x <= y {
@@ -82,6 +83,18 @@ func (guess *Guess) calculateNumberOfBullsAndCows(numberToGuess string) {
 
 	for i := 0; i < 10; i++ {
 		guess.cows += min(numberToGuessDigits[i], guessDigits[i])
+	}
+}
+
+func init() {
+	MIN = 1
+	for i := 0; i < NUM_LEN-1; i++ {
+		MIN *= 10
+	}
+
+	MAX = 1
+	for i := 0; i < NUM_LEN; i++ {
+		MAX *= 10
 	}
 }
 
