@@ -2,17 +2,15 @@ package main
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"math/rand"
-	"os"
 	"strconv"
 	"strings"
 	"time"
 )
 
-const NUM_LEN = 4
-
-var MIN, MAX int
+var MIN, MAX, NUM_LEN int
 
 func min(x, y int) int {
 	if x <= y {
@@ -88,6 +86,9 @@ func (guess *Guess) calculateNumberOfBullsAndCows(numberToGuess string) {
 }
 
 func init() {
+	flag.IntVar(&NUM_LEN, "n", 4, "set number's length")
+	flag.Parse()
+
 	MIN = 1
 	for i := 0; i < NUM_LEN-1; i++ {
 		MIN *= 10
@@ -100,38 +101,30 @@ func init() {
 }
 
 func main() {
-	fmt.Println("MOO")
+	fmt.Print("MOO\nnew game\n")
 
+	game := newGame()
 	for {
-		fmt.Println("new game")
-		game := newGame()
+		fmt.Print("? ")
 
-		for {
-			fmt.Print("? ")
+		var guess Guess
+		fmt.Scan(&guess.number)
+		guess.formatNumber()
 
-			var guess Guess
-			fmt.Scan(&guess.number)
-			guess.formatNumber()
+		game.totalGuesses++
 
-			if guess.number == "q" {
-				os.Exit(0)
-			}
+		err := guess.validate()
+		if err != nil {
+			fmt.Println(err.Error())
+			continue
+		}
 
-			game.totalGuesses++
+		guess.calculateNumberOfBullsAndCows(game.number)
+		guess.displaySummary()
 
-			err := guess.validate()
-			if err != nil {
-				fmt.Println(err.Error())
-				continue
-			}
-
-			guess.calculateNumberOfBullsAndCows(game.number)
-			guess.displaySummary()
-
-			if guess.bulls == NUM_LEN {
-				game.displaySummary()
-				break
-			}
+		if guess.bulls == NUM_LEN {
+			game.displaySummary()
+			break
 		}
 	}
 }
