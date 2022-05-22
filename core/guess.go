@@ -52,6 +52,10 @@ func (guess *Guess) CalculateNumberOfBullsAndCows(num_len int, numberToGuess str
 	}
 }
 
+func (guess *Guess) GetNumber() string {
+	return guess.Number
+}
+
 func (guess *Guess) GetBulls() int {
 	return guess.Bulls
 }
