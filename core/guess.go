@@ -60,6 +60,10 @@ func (guess *Guess) GetBulls() int {
 	return guess.Bulls
 }
 
+func (guess *Guess) GetCows() int {
+	return guess.Cows
+}
+
 func (guess *Guess) DisplaySummary() {
 	fmt.Printf("bulls: %d; cows: %d\n", guess.Bulls, guess.Cows)
 }
