@@ -9,24 +9,15 @@ import (
 	. "moo/helpers"
 )
 
-var num_len int
-
-func newGame() Game {
-	return Game{
-		Number:       GenerateNumber(num_len),
-		TotalGuesses: 0,
-	}
-}
-
 func init() {
-	flag.IntVar(&num_len, "n", 4, "set number's length")
+	flag.IntVar(&NUM_LENGTH, "n", 4, "set number's length")
 	flag.Parse()
 }
 
 func main() {
 	fmt.Print("MOO\nnew game\n")
 
-	game := newGame()
+	game := NewGame()
 	for {
 		fmt.Print("? ")
 
@@ -34,18 +25,18 @@ func main() {
 		fmt.Scan(&guess.Number)
 		guess.FormatNumber()
 
-		game.AddGuess()
+		game.TotalNumberOfGuesses++
 
-		err := guess.Validate(num_len)
+		err := guess.Validate()
 		if err != nil {
 			fmt.Println(err.Error())
 			continue
 		}
 
-		guess.CalculateNumberOfBullsAndCows(num_len, game.GetNumber())
+		guess.CalculateNumberOfBullsAndCows(game.Number)
 		guess.DisplaySummary()
 
-		if guess.GetBulls() == num_len {
+		if guess.Bulls == NUM_LENGTH {
 			game.DisplaySummary()
 			os.Exit(0)
 		}

@@ -1,7 +1,6 @@
 package core
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -19,49 +18,40 @@ func (guess *Guess) FormatNumber() {
 	guess.Number = strings.TrimSpace(guess.Number)
 }
 
-func (guess *Guess) Validate(num_len int) error {
-	errorMessage := errors.New("bad guess")
+func (guess *Guess) Validate() error {
+	badGuessError := NewBadGuessError()
 
-	if len(guess.Number) != num_len {
-		return errorMessage
+	if len(guess.Number) != NUM_LENGTH {
+		return badGuessError
 	}
 
 	_, err := strconv.Atoi(guess.Number)
 	if err != nil {
-		return errorMessage
+		return badGuessError
 	}
 
 	return nil
 }
 
-func (guess *Guess) CalculateNumberOfBullsAndCows(num_len int, numberToGuess string) {
-	guessDigits := make([]int, 10)
-	numberToGuessDigits := make([]int, 10)
+func (guess *Guess) CalculateNumberOfBullsAndCows(numberToGuess string) {
+	potentialCowsOfGuessedNumber := make([]int, 10)
+	potentialCowsOfNumberToGuess := make([]int, 10)
 
-	for i := 0; i < num_len; i++ {
-		if guess.Number[i] == numberToGuess[i] {
+	for i := 0; i < NUM_LENGTH; i++ {
+		digitOfGuessedNumber := guess.Number[i] - '0'
+		digitOfNumberToGuess := numberToGuess[i] - '0'
+
+		if digitOfGuessedNumber == digitOfNumberToGuess {
 			guess.Bulls++
 		} else {
-			guessDigits[guess.Number[i]-'0']++
-			numberToGuessDigits[numberToGuess[i]-'0']++
+			potentialCowsOfGuessedNumber[digitOfGuessedNumber]++
+			potentialCowsOfNumberToGuess[digitOfNumberToGuess]++
 		}
 	}
 
 	for i := 0; i < 10; i++ {
-		guess.Cows += Min(numberToGuessDigits[i], guessDigits[i])
+		guess.Cows += Min(potentialCowsOfNumberToGuess[i], potentialCowsOfGuessedNumber[i])
 	}
-}
-
-func (guess *Guess) GetNumber() string {
-	return guess.Number
-}
-
-func (guess *Guess) GetBulls() int {
-	return guess.Bulls
-}
-
-func (guess *Guess) GetCows() int {
-	return guess.Cows
 }
 
 func (guess *Guess) DisplaySummary() {

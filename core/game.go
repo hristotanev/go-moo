@@ -1,20 +1,23 @@
 package core
 
-import "fmt"
+import (
+	"fmt"
+
+	. "moo/helpers"
+)
 
 type Game struct {
-	Number       string
-	TotalGuesses int
+	Number               string
+	TotalNumberOfGuesses int
 }
 
-func (game *Game) GetNumber() string {
-	return game.Number
-}
-
-func (game *Game) AddGuess() {
-	game.TotalGuesses++
+func NewGame() *Game {
+	return &Game{
+		Number:               GenerateNumberOfLength(NUM_LENGTH),
+		TotalNumberOfGuesses: 0,
+	}
 }
 
 func (game *Game) DisplaySummary() {
-	fmt.Printf("%d guess(es)\n\n", game.TotalGuesses)
+	fmt.Printf("%d guess(es)\n\n", game.TotalNumberOfGuesses)
 }

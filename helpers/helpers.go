@@ -14,7 +14,7 @@ func Min(x, y int) int {
 	return y
 }
 
-func GenerateNumber(num_len int) string {
+func GenerateNumberOfLength(num_len int) string {
 	rand.Seed(time.Now().UnixNano())
 
 	min := 1
