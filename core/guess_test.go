@@ -1,6 +1,10 @@
 package core
 
-import "testing"
+import (
+	"testing"
+
+	. "moo/helpers"
+)
 
 func TestGuessNumberGetsFormattedCorrectly(t *testing.T) {
 	guess := Guess{
@@ -37,6 +41,8 @@ func TestValidationFailsForAnAlphaNumericGuess(t *testing.T) {
 }
 
 func TestValidationPassesForAFullyNumericGuessWithCorrectLength(t *testing.T) {
+	NUM_LENGTH = 4
+
 	guess := Guess{
 		Number: "1234",
 	}
@@ -48,8 +54,12 @@ func TestValidationPassesForAFullyNumericGuessWithCorrectLength(t *testing.T) {
 }
 
 func TestNumberOfBullsAndCowsGetsCalculatedCorrectly(t *testing.T) {
+	NUM_LENGTH = 4
+
 	guess := Guess{
 		Number: "1234",
+		Bulls:  0,
+		Cows:   0,
 	}
 
 	guess.CalculateNumberOfBullsAndCows("1374")
@@ -58,6 +68,6 @@ func TestNumberOfBullsAndCowsGetsCalculatedCorrectly(t *testing.T) {
 	expectedCows := 1
 
 	if guess.Bulls != expectedBulls || guess.Cows != expectedCows {
-		t.Errorf("Expected %d bulls and %d cows, got %d bulls and %d cows.", guess.Bulls, guess.Cows, expectedBulls, expectedCows)
+		t.Errorf("Expected %d bulls and %d cows, got %d bulls and %d cows.", expectedBulls, expectedCows, guess.Bulls, guess.Cows)
 	}
 }
